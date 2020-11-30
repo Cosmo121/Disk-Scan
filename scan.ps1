@@ -25,13 +25,13 @@ if ( -not (Test-Path 'C:\temp\diskspacereports\Servers.txt' -PathType Leaf))
             $File = Get-Content -Path C:\temp\diskspacereports\servers.txt
             Write-Host (
                 "
-                 __________________________
-                |                          |
-                |                          |
-                |  Retrieving contents of  |
-                |     servers.txt          |
-                |                          |
-                |__________________________|
+     __________________________
+    |                          |
+    |                          |
+    |  Retrieving contents of  |
+    |     servers.txt          |
+    |                          |
+    |__________________________|
                 "
             )
         }
@@ -48,6 +48,18 @@ function Get-Servers {
 }
 Get-Servers
 
+Write-Host (
+    "
+     __________________________
+    |                          |
+    |                          |
+    |    Getting Credentials   |
+    |                          |
+    |__________________________|
+    
+    "
+)
+
 $RunAccount = Get-Credential -Message "Enter admin account username and password"
 $LogDate = get-date -f yyyy_MM_dd_hhmm
 $DiskReport = ForEach ($Servernames in ($File))
@@ -61,12 +73,25 @@ $DiskReport = ForEach ($Servernames in ($File))
 $DiskReport | 
 Select-Object @{Label = "Server Name";Expression = {$_.SystemName}},
 @{Label = "Drive Letter";Expression = {$_.DeviceID}},
-@{Label = "Total Capacity (MB)";Expression = {"{0:N1}" -f( $_.Size / 1mb)}},
-@{Label = "Free Space (MB)";Expression = {"{0:N1}" -f( $_.Freespace / 1mb ) }},
+@{Label = "Total Capacity (GB)";Expression = {"{0:N1}" -f( $_.Size / 1gb)}},
+@{Label = "Free Space (GB)";Expression = {"{0:N1}" -f( $_.Freespace / 1gb ) }},
 @{Label = 'Free Space (%)'; Expression = {"{0:P0}" -f ($_.freespace/$_.size)}} |
 
 #Export report to CSV file (Disk Report)
 Export-Csv -path "C:\temp\diskspacereports\DiskReport\DiskReport_$logDate.csv" -NoTypeInformation
+
+Write-Host (
+    "
+     __________________________
+    |                          |
+    |                          |
+    |   Opening CSV file and   |
+    |    exiting script        |
+    |                          |
+    |__________________________|
+    
+    "
+)
 
 #Open csv file
 Invoke-Item C:\Temp\DiskSpaceReports\DiskReport\DiskReport_$logDate.csv
