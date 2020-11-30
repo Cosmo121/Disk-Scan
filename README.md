@@ -27,7 +27,7 @@ Pull requests can be made via GitHub: [Disk-Scan](https://github.com/Cosmo121/Di
 ## License
 MIT License
 
-Copyright (c) [2020] [Mike Hartman]
+Copyright (c) 2020 Mike Hartman
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
