@@ -1,4 +1,5 @@
-
+# Setup requirements
+New-Item -Path "c:\temp\diskspacereports" -Name "DiskReport" -ItemType "directory" -ErrorAction SilentlyContinue
 
 Write-Host (
     "
