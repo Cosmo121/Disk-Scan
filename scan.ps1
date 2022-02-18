@@ -1,6 +1,17 @@
 # Setup requirements
 New-Item -Path "c:\temp\diskspacereports" -Name "DiskReport" -ItemType "directory" -ErrorAction SilentlyContinue
 
+Function Get-ServerFile ($defaultDirectory)
+{
+    [system.reflection.assembly]::LoadWithPartialName("System.windows.forms") | Out-Null
+
+    $OpenFileDialog = New-Object System.Windows.Forms.OpenFileDialog
+    $OpenFileDialog.InitialDirectory = $defaultDirectory
+    $openFileDialog.Filter = "TXT (*.txt) | *.txt"
+    $openFileDialog.ShowDialog() | Out-Null
+    $openFileDialog.FileName
+}
+
 Write-Host (
     "
      __________________________
@@ -12,6 +23,10 @@ Write-Host (
     
     "
 )
+
+$inputFile = Get-ServerFile "C:\temp\diskspacereports"
+
+<# old code, before openfiledialog implementation
 
 Start-Sleep -Seconds 4
 if ( -not (Test-Path 'C:\temp\diskspacereports\Servers.txt' -PathType Leaf))
@@ -48,6 +63,35 @@ function Get-Servers {
     Start-Sleep -Seconds 4  
 }
 Get-Servers
+
+#>
+
+try {
+    $File = Get-Content $inputFile
+    Write-Host (
+        "
+         __________________________
+        |                          |
+        |                          |
+        |  Retrieving contents of  |
+        |     servers.txt          |
+        |                          |
+        |__________________________|
+        "
+    )
+}
+catch {
+    "Error occured while trying to read from text file"
+}
+
+$File = Get-Content $inputFile
+
+$servers = Get-Content $inputFile
+$serverCount = $servers.count
+
+Write-Host "Found " $ServerCount "server(s) in text file"
+
+Start-Sleep -Seconds 2
 
 Write-Host (
     "
