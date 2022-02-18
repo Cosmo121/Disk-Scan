@@ -7,10 +7,17 @@ Does what it do. Scans remote servers/workstations for disk space statistics and
 
 Always grab the latest version from: [github.com/Cosmo121/Disk-Scan](https://github.com/Cosmo121/Disk-Scan)
 
-Set the parameter $TxtFilePath to where your text file is that contains the devices you want to scan, or use the default path below
+Will create the following file path:
 ```PowerShell
-$TxtFilePath = 'C:\temp\diskspacereports\servers.txt
+C:\temp\diskspacereports\DiskReport
 ```
+Prompts you for a list of servers you want to scan, from a .txt file. The text file should be in the format of one hostname per line:
+```PowerShell
+serverName1
+serverName2
+serverName3
+```
+
 By default, the CSV will be saved in C:\temp\diskspacereports as well. This can also be changed, with
 
 ```PowerShell
