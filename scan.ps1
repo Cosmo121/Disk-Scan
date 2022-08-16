@@ -26,46 +26,6 @@ Write-Host (
 
 $inputFile = Get-ServerFile "C:\temp\diskspacereports"
 
-<# old code, before openfiledialog implementation
-
-Start-Sleep -Seconds 4
-if ( -not (Test-Path 'C:\temp\diskspacereports\Servers.txt' -PathType Leaf))
-{
-    # the servers.txt file wasn't found, write error and exit
-    "No server text file found. Please create a Servers.txt at c:\temp\diskspacereports\ or edit script to look at desired path."
-    exit
-}
-    else {
-        # servers.txt exists, try to grab it
-        try {
-            $File = Get-Content -Path C:\temp\diskspacereports\servers.txt
-            Write-Host (
-                "
-     __________________________
-    |                          |
-    |                          |
-    |  Retrieving contents of  |
-    |     servers.txt          |
-    |                          |
-    |__________________________|
-                "
-            )
-        }
-        catch {
-            "Error occured grabbing Servers from text file :("
-        }
-    }
-
-function Get-Servers {
-    $Servers = Get-Content C:\temp\diskspacereports\servers.txt
-    $ServerCount = $Servers.count
-    Write-Host "Found " $ServerCount "server(s) in text file"
-    Start-Sleep -Seconds 4  
-}
-Get-Servers
-
-#>
-
 try {
     $File = Get-Content $inputFile
     Write-Host (
