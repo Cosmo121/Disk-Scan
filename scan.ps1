@@ -74,7 +74,21 @@ Write-Host (
 )
 
 $RunAccount = Get-Credential -Message "Enter admin account username and password"
+
+Write-Host (
+    "
+     __________________________
+    |                          |
+    |                          |
+    |    Running Disk Scan     |
+    |                          |
+    |__________________________|
+    
+    "
+)
+
 $LogDate = get-date -f yyyy_MM_dd_hhmm
+
 $DiskReport = ForEach ($Servernames in ($File))
 
 
