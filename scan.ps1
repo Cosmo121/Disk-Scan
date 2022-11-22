@@ -1,3 +1,11 @@
+<#############################################################
+CREATED BY: mike hartman
+CONTACT: michael.hartman0@gmail.com
+CONTACT: https://thepc.co
+CONTACT: https://github.com/Cosmo121
+LATEST VERSION: https://github.com/Cosmo121/Disk-Scan
+#############################################################>
+
 # Setup requirements
 New-Item -Path "c:\temp\diskspacereports" -Name "DiskReport" -ItemType "directory" -ErrorAction SilentlyContinue
 
