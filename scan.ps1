@@ -82,6 +82,15 @@ $DiskReport = ForEach ($Servernames in ($File))
 -ComputerName $Servernames -Filter "Drivetype=3" `
 -ErrorAction SilentlyContinue }
 
+foreach ($Servernames in $servers) {
+    if (Test-NetConnection -Computer $Servernames -Port 3389 -InformationLevel Quiet -WarningAction SilentlyContinue) {
+        $_
+    }
+    else {
+        Write-Error "Can't hit $Servernames. Skipping..."
+    }
+}
+
 #create reports
 $DiskReport | 
 Select-Object @{Label = "Server Name";Expression = {$_.SystemName}},
