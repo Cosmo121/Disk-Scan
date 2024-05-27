@@ -3,7 +3,7 @@
 
   
 
-Scans remote servers/workstations for disk space statistics and exports to a CSV file. Will scan all attached drives
+Scans remote servers/workstations for disk space statistics and exports to a CSV file. Will scan all attached drives.
 
   
   
@@ -29,9 +29,7 @@ Prompts you for a list of servers you want to scan, from a .txt file. The text f
 ```PowerShell
 
 serverName1
-
 serverName2
-
 serverName3
 
 ```
@@ -60,7 +58,7 @@ Invoke-Item C:\Temp\DiskSpaceReports\DiskReport\DiskReport_$logDate.csv
 After running the script, File Explorer will prompt for your server txt file
 ![file_expolorer_prompt](/docs/file_expolorer_prompt.png "Prompt for txt file")
 
-Then you get prompted to enter your credentials to access the servers/workstations you specified
+Optional: You get prompted to enter your credentials to access the servers/workstations you specified. This is helpful if you run the script with different credentials than you would use to authenticate to the servers/workstations you are scanning. To enable this feature, you must uncomment the $RunAccount line.
 ![cred_prompt](/docs/cred_prompt.png "Prompt for credentials")
 
 And finally, the CSV will open with the results
