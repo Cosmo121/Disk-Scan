@@ -9,7 +9,7 @@ LATEST VERSION: https://github.com/Cosmo121/Disk-Scan
 # Setup requirements
 New-Item -Path "c:\temp\diskspacereports" -Name "DiskReport" -ItemType "directory" -ErrorAction SilentlyContinue
 
-Function Get-ServerFile ($defaultDirectory)
+function Get-ServerFile ($defaultDirectory)
 {
     [system.reflection.assembly]::LoadWithPartialName("System.windows.forms") | Out-Null
 
@@ -18,6 +18,32 @@ Function Get-ServerFile ($defaultDirectory)
     $openFileDialog.Filter = "TXT (*.txt) | *.txt"
     $openFileDialog.ShowDialog() | Out-Null
     $openFileDialog.FileName
+}
+
+function Get-InputPath {
+    [Parameter(Mandatory=$true)]
+    [string]$inputFilePath
+}
+
+function Get-InputFile {
+    Parameter(Mandatory=$true)
+    try {
+        $File = Get-Content $inputFile
+        Write-Host (
+            "
+             __________________________
+            |                          |
+            |                          |
+            |  Retrieving contents of  |
+            |     servers.txt          |
+            |                          |
+            |__________________________|
+            "
+        )
+    }
+    catch {
+        "Error occured while trying to read from text file"
+    }
 }
 
 Write-Host (
@@ -32,35 +58,15 @@ Write-Host (
     "
 )
 
-$inputFile = Get-ServerFile "C:\temp\diskspacereports"
-
-try {
-    $File = Get-Content $inputFile
-    Write-Host (
-        "
-         __________________________
-        |                          |
-        |                          |
-        |  Retrieving contents of  |
-        |     servers.txt          |
-        |                          |
-        |__________________________|
-        "
-    )
-}
-catch {
-    "Error occured while trying to read from text file"
-}
-
+$inputFile = Get-ServerFile $inputFilePath
 $File = Get-Content $inputFile
-
 $servers = Get-Content $inputFile
 $serverCount = $servers.count
 
 Write-Host "Found " $ServerCount "server(s) in text file"
-
 Start-Sleep -Seconds 2
 
+<# if you use alternate credentials to run on remote clients, uncomment the following lines
 Write-Host (
     "
      __________________________
@@ -74,6 +80,7 @@ Write-Host (
 )
 
 $RunAccount = Get-Credential -Message "Enter admin account username and password"
+#>
 
 Write-Host (
     "
@@ -88,24 +95,20 @@ Write-Host (
 )
 
 $LogDate = get-date -f yyyy_MM_dd_hhmm
-
 $DiskReport = ForEach ($Servernames in ($File))
 
-
-{Get-WmiObject win32_logicaldisk -Credential $RunAccount `
--ComputerName $Servernames -Filter "Drivetype=3" `
--ErrorAction SilentlyContinue }
-
-foreach ($Servernames in $servers) {
-    if (Test-NetConnection -Computer $Servernames -Port 3389 -InformationLevel Quiet -WarningAction SilentlyContinue) {
-        $_
-    }
-    else {
-        Write-Error "Can't hit $Servernames. Skipping..."
+{
+    $Servernames | ForEach-Object {
+        if (Test-NetConnection -Computer $_ -Port 3389 -InformationLevel Quiet -WarningAction SilentlyContinue) {
+            Get-CimInstance Win32_LogicalDisk -ComputerName $_ -Filter "Drivetype=3" -ErrorAction SilentlyContinue
+        }
+        else {
+            Write-Error "Can't hit $_. Skipping..."
+        }
     }
 }
 
-#create reports
+#create report
 $DiskReport | 
 Select-Object @{Label = "Server Name";Expression = {$_.SystemName}},
 @{Label = "Drive Letter";Expression = {$_.DeviceID}},
